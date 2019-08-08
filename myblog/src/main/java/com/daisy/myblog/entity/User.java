@@ -21,7 +21,6 @@ public class User {
     private String password;
     private String nickname;
     private boolean enabled;
-    private String roleids;
     private String email;
     private String userface;
     private Timestamp regTime;

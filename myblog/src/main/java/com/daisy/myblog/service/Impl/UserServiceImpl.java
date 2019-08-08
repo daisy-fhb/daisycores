@@ -1,9 +1,8 @@
 package com.daisy.myblog.service.Impl;
 
-import com.daisy.myblog.dao.RolesMapper;
 import com.daisy.myblog.dao.UserMapper;
-import com.daisy.myblog.entity.Role;
 import com.daisy.myblog.entity.User;
+import com.daisy.myblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +14,9 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserServiceImpl   {
+public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
-    @Autowired
-    RolesMapper rolesMapper;
 
 
     /**
@@ -28,6 +25,7 @@ public class UserServiceImpl   {
      * 1表示用户名重复
      * 2表示失败
      */
+    @Override
     public int reg(User user) {
         User loadUserByUsername = userMapper.loadUserByUsername(user.getUsername());
         if (loadUserByUsername != null) {
@@ -39,8 +37,7 @@ public class UserServiceImpl   {
         long result = userMapper.reg(user);
         //配置用户的角色，默认都是普通用户
         String[] roles = new String[]{"2"};
-        int i = rolesMapper.addRoles(roles, user.getId());
-        boolean b = i == roles.length && result == 1;
+        boolean b =result == 1;
         if (b) {
             return 0;
         } else {
@@ -48,29 +45,23 @@ public class UserServiceImpl   {
         }
     }
 
-
+    @Override
     public List<User> getUserByNickname(String nickname) {
         List<User> list = userMapper.getUserByNickname(nickname);
         return list;
     }
 
-    public List<Role> getAllRole() {
-        return userMapper.getAllRole();
-    }
-
+    @Override
     public int updateUserEnabled(Boolean enabled, Long uid) {
         return userMapper.updateUserEnabled(enabled, uid);
     }
 
+    @Override
     public int deleteUserById(Long uid) {
         return userMapper.deleteUserById(uid);
     }
 
-    public int updateUserRoles(Long[] rids, Long id) {
-        int i = userMapper.deleteUserRolesByUid(id);
-        return userMapper.setUserRoles(rids, id);
-    }
-
+    @Override
     public User getUserById(Long id) {
         return userMapper.getUserById(id);
     }

@@ -1,6 +1,5 @@
 package com.daisy.myblog.controller.admin;
 
-import com.daisy.myblog.entity.Role;
 import com.daisy.myblog.entity.User;
 import com.daisy.myblog.service.Impl.UserServiceImpl;
 import com.daisy.myblog.util.RespBean;
@@ -31,10 +30,6 @@ public class UserManaController {
         return userService.getUserById(id);
     }
 
-    @RequestMapping(value = "/roles", method = RequestMethod.GET)
-    public List<Role> getAllRole() {
-        return userService.getAllRole();
-    }
 
     @RequestMapping(value = "/user/enabled", method = RequestMethod.PUT)
     public RespBean updateUserEnabled(Boolean enabled, Long uid) {
@@ -51,15 +46,6 @@ public class UserManaController {
             return new RespBean(true,"success", "删除成功!");
         } else {
             return new RespBean(false,"error", "删除失败!");
-        }
-    }
-
-    @RequestMapping(value = "/user/role", method = RequestMethod.PUT)
-    public RespBean updateUserRoles(Long[] rids, Long id) {
-        if (userService.updateUserRoles(rids, id) == rids.length) {
-            return new RespBean(true,"success", "更新成功!");
-        } else {
-            return new RespBean(false,"error", "更新失败!");
         }
     }
 }
