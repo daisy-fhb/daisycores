@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daisy.pirelli.dao.TestDao">
+
+    <select id="QueryByMutiTable" parameterType="HashMap" resultType="HashMap">
+        SELECT ti.filename,tic.age from t_test_info ti
+        LEFT JOIN
+        t_test_info_copy tic on ti.id =tic.id2
+        where 1=1
+        <if test="model != null and '' != model">
+            and ti.model = #{model}
+        </if>
+
+        <if test="type != null and '' != type">
+            and ti.type = #{type}
+        </if>
+    </select>
+
+</mapper>
