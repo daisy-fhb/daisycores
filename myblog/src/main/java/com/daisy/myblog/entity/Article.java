@@ -27,8 +27,8 @@ public class Article {
     private Integer pageView;
     private Timestamp editTime;
     private String[] dynamicTags;
-    private String nickname;
-    private String cateName;
     private String tagids;
     private String stateStr;
+    private String nickname;
+    private String cateName;
 }

@@ -41,6 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
             article.setEditTime(timestamp);
             //设置当前用户
             article.setUid(1L);
+            article.setPageView(0);
             int i = articleMapper.addNewArticle(article);
             //打标签
             String[] dynamicTags = article.getDynamicTags();
@@ -111,6 +112,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article getArticleById(Long aid) {
         Article article = articleMapper.getArticleById(aid);
+        List<String> tags=articleMapper.getTagsByaid(aid);
+        String []tagg=new String[tags.size()];
+        for (int i=0;i<tags.size();i++){
+           tagg[i]=tags.get(i);
+        }
+        article.setDynamicTags(tagg);
         articleMapper.pvIncrement(aid);
         return article;
     }
