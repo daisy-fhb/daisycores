@@ -4,10 +4,7 @@ import com.daisy.myblog.entity.Article;
 import com.daisy.myblog.service.ArticleService;
 import com.daisy.myblog.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin
 public class AdminController {
     @Autowired
     ArticleService articleService;

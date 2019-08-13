@@ -4,10 +4,7 @@ import com.daisy.myblog.entity.User;
 import com.daisy.myblog.service.Impl.UserServiceImpl;
 import com.daisy.myblog.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ import java.util.List;
  * Created by daisy
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/admin")
 public class UserManaController {
     @Autowired

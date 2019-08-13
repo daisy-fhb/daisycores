@@ -16,6 +16,7 @@ import java.util.*;
  * Created by daisy.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/article")
 public class ArticleController {
 

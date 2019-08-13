@@ -4,6 +4,7 @@ import com.daisy.myblog.entity.User;
 import com.daisy.myblog.service.Impl.UserServiceImpl;
 import com.daisy.myblog.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by daisy.
  */
 @RestController
+@CrossOrigin
 public class LoginRegController {
 
     @Autowired
