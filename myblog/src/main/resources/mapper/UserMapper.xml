@@ -41,4 +41,13 @@
     <delete id="deleteUserById">
         DELETE FROM user WHERE id=#{id}
     </delete>
+
+    <insert id="addLeaveMsg"  parameterType="HashMap">
+        insert into leavemsg (id,content,areainfo,time)
+        values (#{id},#{content},#{areainfo},#{time})
+    </insert>
+
+    <select id="getlmsg" resultType="HashMap">
+        select * from leavemsg order by rand() limit 5
+    </select>
 </mapper>

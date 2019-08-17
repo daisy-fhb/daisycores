@@ -4,9 +4,9 @@ import com.daisy.myblog.entity.User;
 import com.daisy.myblog.service.Impl.UserServiceImpl;
 import com.daisy.myblog.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by daisy.
@@ -52,6 +52,16 @@ public class LoginRegController {
             //失败
             return new RespBean(false,"error", "注册失败!");
         }
+    }
+
+    @RequestMapping(value = "leavemsg", method = RequestMethod.POST)
+    RespBean leavemsg(@RequestBody String data, HttpServletRequest request){
+        return userService.addLeaveMsg(data,request);
+    }
+
+    @RequestMapping(value = "getlmsg", method = RequestMethod.GET)
+    RespBean getlmsg(){
+        return userService.getlmsg();
     }
 
     @RequestMapping("/login")

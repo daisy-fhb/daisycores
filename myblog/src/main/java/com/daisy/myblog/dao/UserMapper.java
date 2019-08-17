@@ -1,11 +1,14 @@
 package com.daisy.myblog.dao;
 
+import com.daisy.myblog.entity.LeaveMsg;
 import com.daisy.myblog.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by daisy.
@@ -25,4 +28,8 @@ public interface UserMapper {
     int deleteUserById(Long uid);
 
     User getUserById(@Param("id") Long id);
+
+    int addLeaveMsg(Map leaveMsg);
+
+    List<HashMap> getlmsg();
 }

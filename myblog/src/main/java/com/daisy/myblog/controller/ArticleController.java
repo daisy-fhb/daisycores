@@ -1,5 +1,7 @@
 package com.daisy.myblog.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.system.SystemUtil;
 import com.daisy.myblog.entity.Article;
 import com.daisy.myblog.service.ArticleService;
 import com.daisy.myblog.util.RespBean;
@@ -45,20 +47,33 @@ public class ArticleController {
         StringBuffer url = new StringBuffer();
         String filePath = "/blogimg/" + sdf.format(new Date());
         String imgFolderPath = req.getServletContext().getRealPath(filePath);
+        String SystemFolderPath ;
+        if(SystemUtil.getOsInfo().isWindows()){
+            SystemFolderPath="D:\\blogs";
+            url.append(req.getScheme())
+                    .append("://")
+                    .append(req.getServerName())
+                    .append(":")
+                    .append(req.getServerPort())
+                    .append(req.getContextPath())
+                    .append(filePath);
+        }else{
+            SystemFolderPath="/usr/sanxing/front/blog/dist/imgs";
+            url.append("http://blog.daisyfhb.cn/imgs/").append(filePath);
+        }
         File imgFolder = new File(imgFolderPath);
         if (!imgFolder.exists()) {
             imgFolder.mkdirs();
         }
-        url.append(req.getScheme())
-                .append("://")
-                .append(req.getServerName())
-                .append(":")
-                .append(req.getServerPort())
-                .append(req.getContextPath())
-                .append(filePath);
+
         String imgName = UUID.randomUUID() + "_" + image.getOriginalFilename().replaceAll(" ", "");
         try {
-            image.transferTo(new File(imgFolder, imgName));
+            if (SystemUtil.getOsInfo().isWindows()){
+                image.transferTo(new File(imgFolder, imgName));
+                FileUtil.copyFile(new File(imgFolder,imgName),new File(SystemFolderPath));
+            }else {
+                image.transferTo(new File(SystemFolderPath, imgName));
+            }
             url.append("/").append(imgName);
             return new RespBean(true,"success", url.toString());
         } catch (IOException e) {
