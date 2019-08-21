@@ -59,7 +59,7 @@ public class ArticleController {
                     .append(filePath);
         }else{
             SystemFolderPath="/usr/sanxing/front/blog/dist/imgs";
-            url.append("http://blog.daisyfhb.cn/imgs/").append(filePath);
+            url.append("http://blog.daisyfhb.cn/imgs/");
         }
         File imgFolder = new File(imgFolderPath);
         if (!imgFolder.exists()) {
