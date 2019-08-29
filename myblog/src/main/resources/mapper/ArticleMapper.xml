@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daisy.myblog.dao.ArticleMapper">
     <insert id="addNewArticle" parameterType="com.daisy.myblog.entity.Article" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO article SET title=#{title},mdContent=#{mdContent},htmlContent=#{htmlContent},summary=#{summary},cid=#{cid},uid=#{uid},publishDate=#{publishDate},state=#{state},editTime=#{editTime}
+        INSERT INTO article SET id=#{id},title=#{title},mdContent=#{mdContent},htmlContent=#{htmlContent},summary=#{summary},cid=#{cid},uid=#{uid},publishDate=#{publishDate},state=#{state},editTime=#{editTime}
     </insert>
     <update id="pvIncrement" parameterType="Long">
         UPDATE article set pageView=pageView+1 WHERE id=#{aid}
