@@ -1,6 +1,5 @@
 package com.daisy.myblog.service.Impl;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.daisy.myblog.dao.ArticleMapper;
 import com.daisy.myblog.dao.TagsMapper;
@@ -42,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
             article.setEditTime(timestamp);
             //设置当前用户
             article.setUid(1L);
-            article.setId(IdUtil.createSnowflake(1,1).nextId());
+            article.setId(RandomUtil.randomLong(1000));
             article.setPageView(0);
             int i = articleMapper.addNewArticle(article);
             //打标签
