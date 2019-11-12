@@ -4,8 +4,6 @@ import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.json.JSONObject;
 import com.daisy.bangsen.controller.im.ImController;
 import com.daisy.bangsen.service.TestService;
-import com.daisy.bangsen.util.CaptchaUtils;
-import com.daisy.bangsen.util.IPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

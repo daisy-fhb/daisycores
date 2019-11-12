@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "t_indent")
 @TableName(value="t_indent")
 @Data
-public class indent {
+public class Indent {
     @TableId("id")
     @Id
     String id;
