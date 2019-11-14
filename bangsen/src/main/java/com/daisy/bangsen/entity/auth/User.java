@@ -1,4 +1,4 @@
-package com.daisy.bangsen.entity;
+package com.daisy.bangsen.entity.auth;
 
 
 import com.baomidou.mybatisplus.annotation.TableId;

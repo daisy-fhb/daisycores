@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daisy.bangsen.dao.UserDao">
+
+    <select id="selectUser" parameterType="HashMap" resultType="com.daisy.bangsen.entity.auth.User">
+        SELECT *from t_user
+        where 1=1
+        <if test="name != null and '' != name">
+            and name like "%"#{name}"%"
+        </if>
+        <if test="deptid != null and '' != deptid">
+            and deptid = #{deptid}
+        </if>
+    </select>
+
+    <select id="selectRoles" parameterType="HashMap" resultType="com.daisy.bangsen.entity.auth.Role">
+        SELECT *from t_role
+    </select>
+
+    <select id="CheckTableExist" parameterType="java.lang.String" resultType="java.lang.String">
+       SHOW TABLES LIKE concat( ''''  ,  ''"%"#{charger}"%"'' , '''' ) ;
+    </select>
+
+
+
+</mapper>

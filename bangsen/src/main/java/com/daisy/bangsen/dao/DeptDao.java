@@ -1,7 +1,7 @@
 package com.daisy.bangsen.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.daisy.bangsen.entity.Department;
+import com.daisy.bangsen.entity.auth.Department;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

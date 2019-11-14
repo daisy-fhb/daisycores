@@ -20,7 +20,7 @@ public class DeptController {
     @Autowired
     ControllerUtils controllerUtils;
 
-    @RequestMapping(value = "/new" , method = RequestMethod.POST)
+    @RequestMapping(value = "/add" , method = RequestMethod.POST)
     public RespBean regist(@RequestBody String jsondata){
         return deptService.save(jsondata);
     }

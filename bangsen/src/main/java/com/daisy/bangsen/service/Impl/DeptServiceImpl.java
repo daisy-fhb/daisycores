@@ -7,7 +7,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.DeptDao;
-import com.daisy.bangsen.entity.Department;
+import com.daisy.bangsen.entity.auth.Department;
 import com.daisy.bangsen.service.DeptService;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
