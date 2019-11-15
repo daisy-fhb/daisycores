@@ -1,34 +1,35 @@
-package com.daisy.bangsen.controller;
+package com.daisy.bangsen.controller.bussiness;
 
 
 import cn.hutool.json.JSONObject;
-import com.daisy.bangsen.service.AllocationService;
+import com.daisy.bangsen.service.HouseInOutService;
 import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/allocation")
+@RequestMapping("/houseinout")
 @CrossOrigin
-public class AllocationController {
+public class HouseInOutController {
     @Autowired
-    AllocationService allocationService;
+    HouseInOutService houseInOutService;
 
     @RequestMapping(value = "/add" , method = RequestMethod.POST)
     public RespBean regist(@RequestBody String jsondata){
-        return allocationService.save(jsondata);
+        return houseInOutService.save(jsondata);
     }
 
     @RequestMapping(value = "/del" , method = RequestMethod.DELETE)
     public RespBean del(@RequestBody String jsondata){
-        return allocationService.delete(jsondata);
+        return houseInOutService.delete(jsondata);
     }
 
     @RequestMapping(value = "/update" , method = RequestMethod.PUT)
     public RespBean update(@RequestBody String jsondata){
-        return allocationService.update(jsondata);
+        return houseInOutService.update(jsondata);
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
@@ -39,7 +40,7 @@ public class AllocationController {
         jsondata.put("parentname",parentname);
         jsondata.put("pagesize",pagesize);
         jsondata.put("currentpage",currentpage);
-        re=allocationService.query(jsondata.toString());
+        re=houseInOutService.query(jsondata.toString());
         return re;
     }
 }

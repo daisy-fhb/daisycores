@@ -12,7 +12,6 @@ import com.daisy.bangsen.service.DeptService;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     DeptDao deptDao;
-    @Autowired
-    RedisTemplate redisTemplate;
 
     @Override
     public RespBean save(String postData) {

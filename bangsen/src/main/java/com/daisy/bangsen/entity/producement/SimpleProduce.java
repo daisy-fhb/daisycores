@@ -1,11 +1,10 @@
-package com.daisy.bangsen.entity.Producement;
+package com.daisy.bangsen.entity.producement;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 
 /**

@@ -9,7 +9,6 @@ import com.daisy.bangsen.service.AllocationService;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,8 +21,6 @@ public class AllocationServiceImpl implements AllocationService {
 
     @Autowired
     AllocationDao allocationDao;
-    @Autowired
-    RedisTemplate redisTemplate;
 
     @Override
     public RespBean save(String postData) {

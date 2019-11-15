@@ -12,8 +12,8 @@ import java.math.BigDecimal;
  * 应付单
  */
 @Entity
-@Table(name = "t_accountreceivable")
-@TableName(value = "t_accountreceivable")
+@Table(name = "t_accountpayable")
+@TableName(value = "t_accountpayable")
 @Data
 public class AccountPayable {
     @TableId("id")

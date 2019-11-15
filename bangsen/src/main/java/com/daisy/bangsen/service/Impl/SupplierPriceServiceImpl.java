@@ -3,30 +3,31 @@ package com.daisy.bangsen.service.Impl;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.daisy.bangsen.dao.IndentDao;
-import com.daisy.bangsen.entity.bussiness.Indent;
-import com.daisy.bangsen.service.IndentService;
+import com.daisy.bangsen.dao.SupplierPriceDao;
+import com.daisy.bangsen.entity.bussiness.SupplierPrice;
+import com.daisy.bangsen.service.SupplierPriceService;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 @Transactional
-public class IndentServiceImpl implements IndentService {
+public class SupplierPriceServiceImpl implements SupplierPriceService {
 
     @Autowired
-    IndentDao indentDao;
+    SupplierPriceDao supplierPriceDao;
 
     @Override
     public RespBean save(String postData) {
         RespBean respBean = new RespBean();
         try {
-            Indent indent = JSONUtil.toBean(postData, Indent.class);
-            int re = indentDao.insert(indent);
+            SupplierPrice supplierPrice = JSONUtil.toBean(postData, SupplierPrice.class);
+            int re = supplierPriceDao.insert(supplierPrice);
             if (re > 0) {
                 respBean.setStatus(200);
                 respBean.setMsg("新增成功");
@@ -46,7 +47,7 @@ public class IndentServiceImpl implements IndentService {
     public RespBean delete(String id) {
         RespBean respBean=new RespBean();
         try {
-            int re=indentDao.deleteById(JSONUtil.parseObj(id).getStr("id"));
+            int re=supplierPriceDao.deleteById(JSONUtil.parseObj(id).getStr("id"));
             if (re>0){
                 respBean.setStatus(200);
                 respBean.setMsg("删除成功");
@@ -66,8 +67,8 @@ public class IndentServiceImpl implements IndentService {
     public RespBean update(String postData) {
         RespBean respBean=new RespBean();
         try {
-            Indent indent= JSONUtil.toBean(postData,Indent.class);
-            int re=indentDao.updateById(indent);
+            SupplierPrice supplierPrice= JSONUtil.toBean(postData,SupplierPrice.class);
+            int re=supplierPriceDao.updateById(supplierPrice);
             if (re>0){
                 respBean.setStatus(200);
                 respBean.setMsg("编辑成功");
@@ -97,13 +98,13 @@ public class IndentServiceImpl implements IndentService {
 
             JSONObject reall = new JSONObject();
             if (StringUtils.isBlank(jsondata.get("currentpage").toString()) && StringUtils.isBlank(jsondata.get("pagesize").toString())) {
-                pageBean = new Page<Indent>(1, 10);
+                pageBean = new Page<SupplierPrice>(1, 10);
             } else {
-                pageBean = new Page<Indent>(Long.parseLong(jsondata.getStr("currentpage")), Long.parseLong(jsondata.getStr("pagesize")));
+                pageBean = new Page<SupplierPrice>(Long.parseLong(jsondata.getStr("currentpage")), Long.parseLong(jsondata.getStr("pagesize")));
             }
             paraMap.put("page", pageBean);
-            List re = indentDao.selectByParam(paraMap);
-            int allsize = indentDao.selectCount(null);
+            List re = supplierPriceDao.selectByParam(paraMap);
+            int allsize = supplierPriceDao.selectCount(null);
             reall.put("total", allsize);
             reall.put("list", re);
             if (re != null && re.size() >= 0) {

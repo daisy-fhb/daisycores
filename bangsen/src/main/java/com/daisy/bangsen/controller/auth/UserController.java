@@ -1,8 +1,7 @@
-package com.daisy.bangsen.controller;
+package com.daisy.bangsen.controller.auth;
 
 import cn.hutool.json.JSONObject;
 import com.daisy.bangsen.service.UserService;
-import com.daisy.bangsen.util.ControllerUtils;
 import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-    @Autowired
-    ControllerUtils controllerUtils;
 
      @RequestMapping(value = "/regist" , method = RequestMethod.POST)
      public RespBean regist(@RequestBody String jsondata){
