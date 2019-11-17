@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daisy.bangsen.dao.AllocationDao">
+<mapper namespace="com.daisy.bangsen.dao.CostDao">
 
-    <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.Allocation">
-        SELECT *from t_allocation
+    <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.financial.Cost">
+        SELECT *from t_cost
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="serialName != null and '' != serialName">
+            and serialName like "%"#{name}"%"
         </if>
     </select>
 

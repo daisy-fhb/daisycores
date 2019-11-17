@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 
 /**
- * 应付单
+ * 简单生产
  */
 @Entity
 @Table(name = "t_simpleproduce")
