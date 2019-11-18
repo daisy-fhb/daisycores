@@ -47,5 +47,7 @@ public class User {
     String deptid; //部门id
     @Column(length = 30)
     String roleid; //角色id
+    String email; //邮箱
+    String emailcode; //邮箱验证码
     Timestamp uptime;
 }

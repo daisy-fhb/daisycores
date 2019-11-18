@@ -14,7 +14,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-     @RequestMapping(value = "/regist" , method = RequestMethod.POST)
+     @RequestMapping(value = "/signUp" , method = RequestMethod.POST)
      public RespBean regist(@RequestBody String jsondata){
         return userService.save(jsondata);
     }
@@ -36,6 +36,11 @@ public class UserController {
         jsondata.put("name",name);
             re=userService.query(jsondata.toString());
         return re;
+    }
+
+    @RequestMapping(value = "/getEmailCode" , method = RequestMethod.POST)
+    public RespBean getEmailCode(@RequestBody String email){
+        return  userService.getEmailCode(email);
     }
 
     @RequestMapping(value = "/signin" , method = RequestMethod.POST)

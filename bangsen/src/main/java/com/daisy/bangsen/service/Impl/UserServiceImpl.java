@@ -3,7 +3,9 @@ package com.daisy.bangsen.service.Impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -19,9 +21,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -39,29 +45,40 @@ public class UserServiceImpl implements UserService {
         RespBean respBean = new RespBean();
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
         try {
-            User user = JSONUtil.toBean(postData, User.class);
-            user.setId(snowflake.nextIdStr());
-            user.setPassword(SecureUtil.md5().digestHex16(user.getPassword()));
-            user.setUptime(new Timestamp(System.currentTimeMillis()));
-            user.setBirthday(user.getBirthday());
-            user.setInterviewtime(user.getInterviewtime());
-            user.setIshire("0");
-            user.setDeptid("—");
-            HashMap param = new HashMap();
-            param.put("account", user.getAccount());
-            List<User> tmp = userDao.selectByMap(param);
-            if (tmp != null && !tmp.isEmpty()) {
-                respBean.setStatus(2000);
-                respBean.setMsg("注册失败,账号名称重复");
-            } else {
-                int re = userDao.insert(user);
-                if (re > 0) {
-                    respBean.setStatus(200);
-                    respBean.setMsg("注册成功");
-                } else {
+            JSONObject postdata=JSONUtil.parseObj(postData);
+            String email=postdata.getStr("uEmail");
+            String verificationCode=postdata.getStr("verificationCode");
+            Map<String,Integer> email_sys=redisTemplate.opsForHash().entries("emailcode");
+            if (email_sys.containsKey(email) && email_sys.get(email).toString().equals(verificationCode)){
+                User user =new User();
+                user.setId(snowflake.nextIdStr());
+                user.setName((postdata.getStr("uName")));
+                user.setAccount((postdata.getStr("uName")));
+                user.setPassword(SecureUtil.md5().digestHex16(postdata.getStr("uPassord")));
+                user.setUptime(new Timestamp(System.currentTimeMillis()));
+                user.setBirthday(user.getBirthday());
+                user.setInterviewtime(user.getInterviewtime());
+                user.setIshire("0");
+                user.setDeptid("—");
+                HashMap param = new HashMap();
+                param.put("account", user.getAccount());
+                List<User> tmp = userDao.selectByMap(param);
+                if (tmp != null && !tmp.isEmpty()) {
                     respBean.setStatus(2000);
-                    respBean.setMsg("注册失败");
+                    respBean.setMsg("注册失败,账号名称重复");
+                } else {
+                    int re = userDao.insert(user);
+                    if (re > 0) {
+                        respBean.setStatus(200);
+                        respBean.setMsg("注册成功");
+                    } else {
+                        respBean.setStatus(2000);
+                        respBean.setMsg("注册失败");
+                    }
                 }
+            }else{
+                respBean.setStatus(2000);
+                respBean.setMsg("注册失败,验证码不正确");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -300,7 +317,6 @@ public class UserServiceImpl implements UserService {
         redisTemplate.opsForHash().putAll("CurrentUserMap", CurrentUserMap);
         redisTemplate.opsForHash().putAll("TokenUserMap", TokenUserMap);
 
-        respBean.setMsg("退出成功");
         respBean.setStatus(200);
         return respBean;
     }
@@ -314,6 +330,25 @@ public class UserServiceImpl implements UserService {
         respBean.setMsg("查询成功");
         respBean.setStatus(200);
         respBean.setData(jsonObject);
+        return respBean;
+    }
+
+    @Override
+    public RespBean getEmailCode(String email) {
+        RespBean respBean=new RespBean();
+        email=JSONUtil.parseObj(email).getStr("email");
+        if (StringUtils.isBlank(email)){
+            respBean.setMsg("邮箱错误，无法获取验证码");
+            respBean.setData(null);
+            respBean.setStatus(2000);
+        }else{
+            int code= RandomUtil.randomInt(100000,999999);
+            MailUtil.send(email, "【邦森电子验证码】", "你好! 你的验证码为  【"+code+"】", false);
+            redisTemplate.opsForHash().put("emailcode",email,code);
+            respBean.setMsg("验证邮件已发送");
+            respBean.setData(null);
+            respBean.setStatus(200);
+        }
         return respBean;
     }
 

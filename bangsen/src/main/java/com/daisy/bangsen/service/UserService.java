@@ -18,4 +18,5 @@ public interface UserService {
 
     RespBean getRoles();
 
+    RespBean getEmailCode(String email);
 }
