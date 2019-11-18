@@ -5,10 +5,22 @@
 <mapper namespace="com.daisy.bangsen.dao.IndentDao">
 
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.Indent">
-        SELECT *from t_indent
+        SELECT * from t_indent
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="purchaseName != null and '' != purchaseName">
+            and purchase_name like "%"#{purchaseName}"%"
+        </if>
+
+      <if test="receiptNumber != null and '' != receiptNumber">
+            and receipt_number  = #{receiptNumber}
+        </if>
+
+        <if test="supplierName != null and '' != supplierName">
+            and supplier_name like "%"#{supplierName}"%"
+        </if>
+
+        <if test="purchaseStatus != null and '' != purchaseStatus">
+            and purchase_status =#{purchaseStatus}
         </if>
     </select>
 

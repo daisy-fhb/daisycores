@@ -7,9 +7,6 @@ import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/indent")
 @CrossOrigin
@@ -33,14 +30,15 @@ public class IndentController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-    public RespBean query(String name,  String currentpage, String pagesize,  String parentname, HttpServletRequest request, HttpServletResponse response){
-        RespBean re;
+    public RespBean query(String name,  String currentpage, String pagesize,  String recordid,  String sName,  String status){
         JSONObject jsondata=new JSONObject();
         jsondata.put("name",name);
-        jsondata.put("parentname",parentname);
         jsondata.put("pagesize",pagesize);
         jsondata.put("currentpage",currentpage);
-        re=indentService.query(jsondata.toString());
+        jsondata.put("recordid",recordid);
+        jsondata.put("s_name",sName);
+        jsondata.put("status",status );
+        RespBean  re=indentService.query(jsondata.toString());
         return re;
     }
 }

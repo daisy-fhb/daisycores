@@ -93,7 +93,7 @@ public class SupplierPriceServiceImpl implements SupplierPriceService {
             Page pageBean;
 
             if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("name", jsondata.get("name"));
+                paraMap.put("item_name", jsondata.get("name"));
             }
 
             JSONObject reall = new JSONObject();

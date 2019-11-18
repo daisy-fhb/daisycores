@@ -14,9 +14,17 @@ public interface UserService {
 
     RespBean signin(String jsondata);
 
-    RespBean signup(String jsondata);
+    RespBean signout(String jsondata);
 
     RespBean getRoles();
 
     RespBean getEmailCode(String email);
+
+    RespBean validationName(String name);
+
+    RespBean validationEmail(String postData);
+
+    RespBean validationEmailCode(String postData);
+
+    RespBean resetPassword(String postData);
 }

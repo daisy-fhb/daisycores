@@ -7,9 +7,6 @@ import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/allocation")
 @CrossOrigin
@@ -33,7 +30,7 @@ public class AllocationController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-    public RespBean query(String name,  String currentpage, String pagesize,  String parentname, HttpServletRequest request, HttpServletResponse response){
+    public RespBean query(String name,  String currentpage, String pagesize,  String parentname){
         RespBean re;
         JSONObject jsondata=new JSONObject();
         jsondata.put("name",name);

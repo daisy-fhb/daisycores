@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
                 user.setId(snowflake.nextIdStr());
                 user.setName((postdata.getStr("uName")));
                 user.setAccount((postdata.getStr("uName")));
+                user.setEmail(email);
+                user.setEmailcode(verificationCode);
                 user.setPassword(SecureUtil.md5().digestHex16(postdata.getStr("uPassord")));
                 user.setUptime(new Timestamp(System.currentTimeMillis()));
-                user.setBirthday(user.getBirthday());
-                user.setInterviewtime(user.getInterviewtime());
                 user.setIshire("0");
                 user.setDeptid("—");
                 HashMap param = new HashMap();
@@ -270,11 +270,11 @@ public class UserServiceImpl implements UserService {
         RespBean respBean = new RespBean();
         JSONObject param = JSONUtil.parseObj(jsondata);
         HashMap paraMap = new HashMap<>();
-        if (param.containsKey("account")) {
-            paraMap.put("account", param.get("account"));
+        if (param.containsKey("uName")) {
+            paraMap.put("name", param.get("uName"));
         }
-        if (param.containsKey("password")) {
-            paraMap.put("password", SecureUtil.md5().digestHex16(param.get("password").toString()));
+        if (param.containsKey("uPassord")) {
+            paraMap.put("password", SecureUtil.md5().digestHex16(param.get("uPassord").toString()));
         }
         List<User> users = userDao.selectByMap(paraMap);
         if (users != null && !users.isEmpty()) {
@@ -303,12 +303,11 @@ public class UserServiceImpl implements UserService {
             respBean.setMsg("登录失败，密码错误");
             respBean.setStatus(2000);
         }
-
         return respBean;
     }
 
     @Override
-    public RespBean signup(String jsondata) {
+    public RespBean signout(String jsondata) {
         RespBean respBean = new RespBean();
         Map<String, String> CurrentUserMap = redisTemplate.opsForHash().entries("CurrentUserMap");
         Map<String, String> TokenUserMap = redisTemplate.opsForHash().entries("TokenUserMap");
@@ -343,11 +342,89 @@ public class UserServiceImpl implements UserService {
             respBean.setStatus(2000);
         }else{
             int code= RandomUtil.randomInt(100000,999999);
-            MailUtil.send(email, "【邦森电子验证码】", "你好! 你的验证码为  【"+code+"】", false);
+            MailUtil.send(email, "【邦森电子验证码】", "你好! 你的注册验证码为  【"+code+"】", false);
             redisTemplate.opsForHash().put("emailcode",email,code);
             respBean.setMsg("验证邮件已发送");
             respBean.setData(null);
             respBean.setStatus(200);
+        }
+        return respBean;
+    }
+
+    @Override
+    public RespBean validationName(String name) {
+        JSONObject nameobject=JSONUtil.parseObj(name);
+        RespBean respBean=new RespBean();
+        HashMap param = new HashMap();
+        param.put("name", nameobject.getStr("uName"));
+        List<User> tmp = userDao.selectByMap(param);
+        if (tmp != null && !tmp.isEmpty()) {
+            respBean.setStatus(200);
+            respBean.setMsg("下一步");
+        }else{
+            respBean.setStatus(2000);
+            respBean.setMsg("系统无此账号信息，请核实");
+        }
+        return  respBean;
+    }
+
+    @Override
+    public RespBean validationEmail(String postData) {
+        JSONObject nameobject=JSONUtil.parseObj(postData);
+        RespBean respBean=new RespBean();
+        HashMap param = new HashMap();
+        param.put("email", nameobject.getStr("uEmail"));
+        param.put("name", nameobject.getStr("uName"));
+        List<User> tmp = userDao.selectByMap(param);
+        if (tmp != null && !tmp.isEmpty()) {
+            int code= RandomUtil.randomInt(100000,999999);
+            MailUtil.send(nameobject.getStr("uEmail"), "【邦森电子验证码】", "你好! 你的验证码为  【"+code+"】,为了你的账号安全，请勿将此验证码透露给其他人!", false);
+            redisTemplate.opsForHash().put("emailcode",nameobject.getStr("uEmail"),code);
+            respBean.setMsg("验证邮件已发送");
+            respBean.setData(null);
+            respBean.setStatus(200);
+        }else{
+            respBean.setStatus(2000);
+            respBean.setMsg("系统无此账号信息，请核实");
+        }
+        return respBean;
+    }
+
+    @Override
+    public RespBean validationEmailCode(String postData) {
+        RespBean respBean=new RespBean();
+        Map<String,Integer> email_sys=redisTemplate.opsForHash().entries("emailcode");
+        JSONObject postdata=JSONUtil.parseObj(postData);
+        String email=postdata.getStr("uEmail");
+        String verificationCode=postdata.getStr("verificationCode");
+        if (email_sys.containsKey(email) && email_sys.get(email).toString().equals(verificationCode)){
+            respBean.setStatus(200);
+        }else{
+            respBean.setStatus(2000);
+            respBean.setMsg("验证失败,验证码不正确");
+        }
+        return respBean;
+    }
+
+    @Override
+    public RespBean resetPassword(String postData) {
+        RespBean respBean=new RespBean();
+        JSONObject postdata=JSONUtil.parseObj(postData);
+        String email=postdata.getStr("uEmail");
+        String password=postdata.getStr("uPassword");
+        String name=postdata.getStr("uName");
+        HashMap param = new HashMap();
+        param.put("email", email);
+        param.put("name", name);
+        List<User> tmp = userDao.selectByMap(param);
+        if (tmp!=null&&!tmp.isEmpty()){
+            User user=tmp.get(0);
+            user.setPassword(SecureUtil.md5().digestHex16(password));
+            userDao.updateById(user);
+            respBean.setStatus(200);
+        }else{
+            respBean.setStatus(2000);
+            respBean.setMsg("修改失败，账号不存在");
         }
         return respBean;
     }

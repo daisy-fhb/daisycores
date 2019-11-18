@@ -1,5 +1,6 @@
 package com.daisy.bangsen.service.Impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -92,7 +93,16 @@ public class IndentServiceImpl implements IndentService {
             Page pageBean;
 
             if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("name", jsondata.get("name"));
+                paraMap.put("purchaseName", jsondata.get("name"));
+            }
+            if (jsondata.containsKey("recordid") && StringUtils.isNotBlank(jsondata.getStr("recordid"))) {
+                paraMap.put("receiptNumber", jsondata.get("recordid"));
+            }
+            if (jsondata.containsKey("s_name") && StringUtils.isNotBlank(jsondata.getStr("s_name"))) {
+                paraMap.put("supplierName", jsondata.get("s_name"));
+            }
+           if (jsondata.containsKey("status") && StringUtils.isNotBlank(jsondata.getStr("status"))) {
+                paraMap.put("purchaseStatus", jsondata.get("status"));
             }
 
             JSONObject reall = new JSONObject();
@@ -103,9 +113,13 @@ public class IndentServiceImpl implements IndentService {
             }
             paraMap.put("page", pageBean);
             List re = indentDao.selectByParam(paraMap);
+            JSONArray ja=JSONUtil.parseArray(re);
+            for (int i=0;i<ja.size();i++){
+                ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+            }
             int allsize = indentDao.selectCount(null);
             reall.put("total", allsize);
-            reall.put("list", re);
+            reall.put("list", ja);
             if (re != null && re.size() >= 0) {
                 respBean.setData(reall);
                 respBean.setStatus(200);
