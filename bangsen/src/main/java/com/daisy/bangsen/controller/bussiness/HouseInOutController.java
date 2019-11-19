@@ -7,9 +7,6 @@ import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/houseinout")
 @CrossOrigin
@@ -33,11 +30,13 @@ public class HouseInOutController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-    public RespBean query(String name,  String currentpage, String pagesize,  String parentname, HttpServletRequest request, HttpServletResponse response){
+    public RespBean query(String  receiptNumber,  String currentpage, String pagesize,  String inOutName,  String warehouseName,  String  inOutType){
         RespBean re;
         JSONObject jsondata=new JSONObject();
-        jsondata.put("name",name);
-        jsondata.put("parentname",parentname);
+        jsondata.put("receiptNumber",receiptNumber);
+        jsondata.put("inOutName",inOutName);
+        jsondata.put("warehouseName",warehouseName);
+        jsondata.put("inOutType", inOutType);
         jsondata.put("pagesize",pagesize);
         jsondata.put("currentpage",currentpage);
         re=houseInOutService.query(jsondata.toString());

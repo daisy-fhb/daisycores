@@ -7,9 +7,6 @@ import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/simpleproduce")
 @CrossOrigin
@@ -33,11 +30,12 @@ public class SimpleProduceController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-    public RespBean query(String name,  String currentpage, String pagesize,  String parentname, HttpServletRequest request, HttpServletResponse response){
+    public RespBean query(String productName,  String currentpage, String  receiptNumber,  String productionStatus, String pagesize){
         RespBean re;
         JSONObject jsondata=new JSONObject();
-        jsondata.put("name",name);
-        jsondata.put("parentname",parentname);
+        jsondata.put("productName",productName);
+        jsondata.put("receiptNumber",receiptNumber);
+        jsondata.put("productionStatus",productionStatus);
         jsondata.put("pagesize",pagesize);
         jsondata.put("currentpage",currentpage);
         re=simpleProduceService.query(jsondata.toString());

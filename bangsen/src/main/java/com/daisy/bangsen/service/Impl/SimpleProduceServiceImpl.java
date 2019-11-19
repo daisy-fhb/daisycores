@@ -1,5 +1,6 @@
 package com.daisy.bangsen.service.Impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -92,8 +93,14 @@ public class SimpleProduceServiceImpl implements SimpleProduceService {
             HashMap paraMap = new HashMap<>();
             Page pageBean;
 
-            if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("name", jsondata.get("name"));
+            if (jsondata.containsKey("productName") && StringUtils.isNotBlank(jsondata.getStr("productName"))) {
+                paraMap.put("product_name", jsondata.get("productName"));
+            }
+            if (jsondata.containsKey("receiptNumber") && StringUtils.isNotBlank(jsondata.getStr("receiptNumber"))) {
+                paraMap.put("receipt_number", jsondata.get("receiptNumber"));
+            }
+            if (jsondata.containsKey("productionStatus") && StringUtils.isNotBlank(jsondata.getStr("productionStatus"))) {
+                paraMap.put("production_status", jsondata.get("productionStatus"));
             }
 
             JSONObject reall = new JSONObject();
@@ -105,8 +112,12 @@ public class SimpleProduceServiceImpl implements SimpleProduceService {
             paraMap.put("page", pageBean);
             List re = simpleProduceDao.selectByParam(paraMap);
             int allsize = simpleProduceDao.selectCount(null);
+            JSONArray ja=JSONUtil.parseArray(re);
+            for (int i =0;i<ja.size();i++){
+                ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+            }
             reall.put("total", allsize);
-            reall.put("list", re);
+            reall.put("list", ja);
             if (re != null && re.size() >= 0) {
                 respBean.setData(reall);
                 respBean.setStatus(200);

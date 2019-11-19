@@ -7,7 +7,11 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.SupplierPrice">
         SELECT *from t_supplierprice
         where 1=1
-        <if test="item_name != null and '' != item_name">
+        <if test="supplier_name != null and '' != supplier_name">
+            and supplier_name like "%"#{supplier_name}"%"
+        </if>
+
+         <if test="item_name != null and '' != item_name">
             and item_name like "%"#{item_name}"%"
         </if>
     </select>

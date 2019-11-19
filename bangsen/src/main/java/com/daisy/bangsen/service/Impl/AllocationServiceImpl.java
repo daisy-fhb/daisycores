@@ -1,5 +1,6 @@
 package com.daisy.bangsen.service.Impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -92,8 +93,15 @@ public class AllocationServiceImpl implements AllocationService {
             HashMap paraMap = new HashMap<>();
             Page pageBean;
 
-            if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("serialName", jsondata.get("name"));
+            if (jsondata.containsKey("serialName") && StringUtils.isNotBlank(jsondata.getStr("serialName"))) {
+                paraMap.put("serial_name", jsondata.get("serialName"));
+            }
+            if (jsondata.containsKey("allocateDate") && StringUtils.isNotBlank(jsondata.getStr("allocateDate"))) {
+                String timeflag=jsondata.get("allocateDate").toString();
+                String realTime_sta= timeflag+" 00:00:00";
+                String realTime_end= timeflag+" 23:59:59";
+                paraMap.put("realTime_sta", realTime_sta);
+                paraMap.put("realTime_end", realTime_end);
             }
 
             JSONObject reall = new JSONObject();
@@ -105,8 +113,12 @@ public class AllocationServiceImpl implements AllocationService {
             paraMap.put("page", pageBean);
             List re = allocationDao.selectByParam(paraMap);
             int allsize = allocationDao.selectCount(null);
+            JSONArray ja=JSONUtil.parseArray(re);
+            for (int i =0;i<ja.size();i++){
+                ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+            }
             reall.put("total", allsize);
-            reall.put("list", re);
+            reall.put("list", ja);
             if (re != null && re.size() >= 0) {
                 respBean.setData(reall);
                 respBean.setStatus(200);

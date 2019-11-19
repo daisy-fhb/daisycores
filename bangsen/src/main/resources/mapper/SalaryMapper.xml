@@ -7,8 +7,8 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.financial.Salary">
         SELECT *from t_salary
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="staff_name != null and '' != staff_name">
+            and staff_name like "%"#{staff_name}"%"
         </if>
     </select>
 

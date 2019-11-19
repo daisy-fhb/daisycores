@@ -20,7 +20,7 @@ public class SimpleProduce {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //按数据库策略递增
     private Long id;
     String receiptNumber; //单据号
-    String productName; //项目名称
+    String productName; //产品名称
     String customerName; //客户名称
     String contractNumber; //合同编号
     String salesDate; //销售日期

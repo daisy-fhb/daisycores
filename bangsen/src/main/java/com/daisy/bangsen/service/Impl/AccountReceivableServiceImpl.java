@@ -1,5 +1,6 @@
 package com.daisy.bangsen.service.Impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -93,7 +94,7 @@ public class AccountReceivableServiceImpl implements AccountReceivableService {
             Page pageBean;
 
             if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("name", jsondata.get("name"));
+                paraMap.put("project_name", jsondata.get("name"));
             }
 
             JSONObject reall = new JSONObject();
@@ -105,8 +106,12 @@ public class AccountReceivableServiceImpl implements AccountReceivableService {
             paraMap.put("page", pageBean);
             List re = accountReceivableDao.selectByParam(paraMap);
             int allsize = accountReceivableDao.selectCount(null);
+            JSONArray ja=JSONUtil.parseArray(re);
+            for (int i =0;i<ja.size();i++){
+                ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+            }
             reall.put("total", allsize);
-            reall.put("list", re);
+            reall.put("list", ja);
             if (re != null && re.size() >= 0) {
                 respBean.setData(reall);
                 respBean.setStatus(200);

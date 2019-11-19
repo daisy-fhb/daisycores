@@ -30,11 +30,11 @@ public class AllocationController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-    public RespBean query(String name,  String currentpage, String pagesize,  String parentname){
+    public RespBean query(String allocateDate,  String currentpage, String pagesize,  String serialName){
         RespBean re;
         JSONObject jsondata=new JSONObject();
-        jsondata.put("name",name);
-        jsondata.put("parentname",parentname);
+        jsondata.put("allocateDate",allocateDate);
+        jsondata.put("serialName",serialName);
         jsondata.put("pagesize",pagesize);
         jsondata.put("currentpage",currentpage);
         re=allocationService.query(jsondata.toString());

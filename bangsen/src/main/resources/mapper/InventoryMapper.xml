@@ -7,8 +7,11 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.Inventory">
         SELECT *from t_inventory
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="serial_name != null and '' != serial_name">
+            and serial_name like "%"#{serial_name}"%"
+        </if>
+        <if test="warehouse_name != null and '' != warehouse_name">
+            and warehouse_name like "%"#{warehouse_name}"%"
         </if>
     </select>
 

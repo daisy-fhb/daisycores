@@ -20,7 +20,7 @@ public class Asset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //按数据库策略递增
     private Long id;
-    String assetName; //项目名称
+    String assetName; //资产名称
     BigDecimal worth; //价值
     String storagePlace; //储放位置
     String wreck; //折损

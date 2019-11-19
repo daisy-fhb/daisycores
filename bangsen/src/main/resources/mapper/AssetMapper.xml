@@ -7,8 +7,14 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.financial.Asset">
         SELECT *from t_asset
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="asset_name != null and '' != asset_name">
+            and asset_name like "%"#{asset_name}"%"
+        </if>
+        <if test="type != null and '' != type">
+            and type = #{type}
+        </if>
+        <if test="status != null and '' != status">
+            and status = #{status}
         </if>
     </select>
 

@@ -7,8 +7,20 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.Csale">
         SELECT *from t_csale
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="sales_name != null and '' != sales_name">
+            and sales_name like "%"#{sales_name}"%"
+        </if>
+
+              <if test="customer_name != null and '' != customer_name">
+            and customer_name like "%"#{customer_name}"%"
+        </if>
+
+              <if test="sales_status != null and '' != sales_status">
+            and sales_status = #{sales_status}
+        </if>
+
+              <if test="receipt_number != null and '' != receipt_number">
+            and receipt_number = #{receipt_number}
         </if>
     </select>
 

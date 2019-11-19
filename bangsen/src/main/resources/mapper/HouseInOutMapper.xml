@@ -7,8 +7,17 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.HouseInOut">
         SELECT *from t_houseinOut
         where 1=1
-        <if test="name != null and '' != name">
-            and name like "%"#{name}"%"
+        <if test="receiptNumber != null and '' != receiptNumber">
+            and receipt_number = #{receiptNumber}
+        </if>
+        <if test="inOutName != null and '' != inOutName">
+            and in_out_name like "%"#{inOutName}"%"
+        </if>
+        <if test="inOutType != null and '' != inOutType">
+            and in_out_type = #{inOutType}
+        </if>
+        <if test="warehouseName != null and '' != warehouseName">
+            and warehouse_name like "%"#{warehouseName}"%"
         </if>
     </select>
 

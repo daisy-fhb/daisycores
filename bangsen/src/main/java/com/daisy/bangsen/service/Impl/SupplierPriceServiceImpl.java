@@ -1,5 +1,6 @@
 package com.daisy.bangsen.service.Impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -92,8 +93,12 @@ public class SupplierPriceServiceImpl implements SupplierPriceService {
             HashMap paraMap = new HashMap<>();
             Page pageBean;
 
-            if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("item_name", jsondata.get("name"));
+            if (jsondata.containsKey("supplierName") && StringUtils.isNotBlank(jsondata.getStr("supplierName"))) {
+                paraMap.put("supplier_name", jsondata.get("supplierName"));
+            }
+
+            if (jsondata.containsKey("itemName") && StringUtils.isNotBlank(jsondata.getStr("itemName"))) {
+                paraMap.put("item_name", jsondata.get("itemName"));
             }
 
             JSONObject reall = new JSONObject();
@@ -105,8 +110,13 @@ public class SupplierPriceServiceImpl implements SupplierPriceService {
             paraMap.put("page", pageBean);
             List re = supplierPriceDao.selectByParam(paraMap);
             int allsize = supplierPriceDao.selectCount(null);
+            JSONArray ja=JSONUtil.parseArray(re);
+            for(int i=0;i<ja.size();i++){
+                ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+            }
+
             reall.put("total", allsize);
-            reall.put("list", re);
+            reall.put("list", ja);
             if (re != null && re.size() >= 0) {
                 respBean.setData(reall);
                 respBean.setStatus(200);

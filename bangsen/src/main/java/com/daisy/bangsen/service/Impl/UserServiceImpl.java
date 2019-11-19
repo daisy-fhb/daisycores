@@ -94,6 +94,12 @@ public class UserServiceImpl implements UserService {
         try {
             int re = userDao.deleteById(JSONUtil.parseObj(id).getStr("id"));
             if (re > 0) {
+                Map<String, HashMap<String,String>> TokenUserMaps= redisTemplate.opsForHash().entries("TokenUserMap");
+                HashMap<String,String> TokenUserMap=TokenUserMaps.get("data");
+                if (TokenUserMap.containsKey(JSONUtil.parseObj(id).getStr("id"))){
+                    TokenUserMap.remove(JSONUtil.parseObj(id).getStr("id"));
+                    redisTemplate.opsForHash().put("TokenUserMap","data",TokenUserMap);
+                }
                 respBean.setStatus(200);
                 respBean.setMsg("删除成功");
             } else {
@@ -112,7 +118,13 @@ public class UserServiceImpl implements UserService {
     public RespBean update(String postData) {
         RespBean respBean = new RespBean();
         try {
+            JSONObject jsonObject=JSONUtil.parseObj(postData);
             User user = JSONUtil.toBean(postData, User.class);
+            if ("男".equals(jsonObject.getStr("sex"))||"1".equals(jsonObject.getStr("sex"))){
+                user.setSex(1);
+            }else{
+                user.setSex(0);
+            }
             int re = userDao.updateById(user);
             if (re > 0) {
                 respBean.setStatus(200);
@@ -287,9 +299,13 @@ public class UserServiceImpl implements UserService {
             role.setName("管理员");
 
             String token = IdUtil.simpleUUID();
-            Map<String, String> TokenUserMap = redisTemplate.opsForHash().entries("TokenUserMap");
+            Map<String, HashMap<String,String>> TokenUserMaps= redisTemplate.opsForHash().entries("TokenUserMap");
+            HashMap<String,String> TokenUserMap=TokenUserMaps.get("data");
+            if (TokenUserMap==null){
+                TokenUserMap=new HashMap<>();
+            }
             TokenUserMap.put(users.get(0).getId(), token);
-            redisTemplate.opsForHash().putAll("TokenUserMap", TokenUserMap);
+            redisTemplate.opsForHash().put("TokenUserMap", "data",TokenUserMap);
 
             respBean.setMsg("登录成功");
             respBean.setStatus(200);
@@ -310,11 +326,12 @@ public class UserServiceImpl implements UserService {
     public RespBean signout(String jsondata) {
         RespBean respBean = new RespBean();
         Map<String, String> CurrentUserMap = redisTemplate.opsForHash().entries("CurrentUserMap");
-        Map<String, String> TokenUserMap = redisTemplate.opsForHash().entries("TokenUserMap");
+        Map<String, HashMap<String,String>> TokenUserMaps= redisTemplate.opsForHash().entries("TokenUserMap");
+        HashMap<String,String> TokenUserMap=TokenUserMaps.get("data");
         CurrentUserMap.remove(JSONUtil.parseObj(jsondata).getStr("userid"));
         TokenUserMap.remove(JSONUtil.parseObj(jsondata).getStr("userid"));
         redisTemplate.opsForHash().putAll("CurrentUserMap", CurrentUserMap);
-        redisTemplate.opsForHash().putAll("TokenUserMap", TokenUserMap);
+        redisTemplate.opsForHash().put("TokenUserMap", "data",TokenUserMap);
 
         respBean.setStatus(200);
         return respBean;

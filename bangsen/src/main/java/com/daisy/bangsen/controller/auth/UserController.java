@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,11 +46,24 @@ public class UserController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-     public RespBean query(String name){
-        RespBean re;
-        JSONObject jsondata=new JSONObject();
-        jsondata.put("name",name);
-            re=userService.query(jsondata.toString());
+     public RespBean query(String name, HttpServletRequest request,HttpServletResponse response) {
+        RespBean re = new RespBean();
+         try {
+             String token = request.getHeader("token");
+             Map<String, HashMap<String,String>> TokenUserMaps= redisTemplate.opsForHash().entries("TokenUserMap");
+             HashMap<String,String> TokenUserMap=TokenUserMaps.get("data");
+             if (!TokenUserMap.containsValue(token)) {
+                 re.setStatus(401);
+                 response.setStatus(401);
+                 response.sendError(401);
+             } else {
+                 JSONObject jsondata = new JSONObject();
+                 jsondata.put("name", name);
+                 re = userService.query(jsondata.toString());
+             }
+         }catch (Exception e){
+             e.printStackTrace();
+         }
         return re;
     }
 
@@ -79,7 +93,8 @@ public class UserController {
 
     @RequestMapping(value = "/getUserInfo" , method = RequestMethod.POST)
     public RespBean getUserInfo(@RequestBody String postData){
-        Map<String, String> TokenUserMap = redisTemplate.opsForHash().entries("TokenUserMap");
+        Map<String, Map<String,String>> TokenUserMaps = redisTemplate.opsForHash().entries("TokenUserMap");
+        Map<String, String> TokenUserMap =TokenUserMaps.get("data");
         Map<String, String> tmpToken=new HashMap();
         for (Map.Entry<String, String>  entry:TokenUserMap.entrySet()){
             tmpToken.put(entry.getValue(),entry.getKey());

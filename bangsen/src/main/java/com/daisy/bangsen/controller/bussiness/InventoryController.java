@@ -7,9 +7,6 @@ import com.daisy.bangsen.util.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/inventory")
 @CrossOrigin
@@ -33,11 +30,11 @@ public class InventoryController {
     }
 
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
-    public RespBean query(String name,  String currentpage, String pagesize,  String parentname, HttpServletRequest request, HttpServletResponse response){
+    public RespBean query(String serialName,  String currentpage, String pagesize,  String warehouseName){
         RespBean re;
         JSONObject jsondata=new JSONObject();
-        jsondata.put("name",name);
-        jsondata.put("parentname",parentname);
+        jsondata.put("serialName",serialName);
+        jsondata.put("warehouseName",warehouseName);
         jsondata.put("pagesize",pagesize);
         jsondata.put("currentpage",currentpage);
         re=inventoryService.query(jsondata.toString());

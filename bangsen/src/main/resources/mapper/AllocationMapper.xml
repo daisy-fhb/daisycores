@@ -7,8 +7,15 @@
     <select id="selectByParam" parameterType="HashMap" resultType="com.daisy.bangsen.entity.bussiness.Allocation">
         SELECT *from t_allocation
         where 1=1
-        <if test="serialName != null and '' != serialName">
-            and serialName like "%"#{serialName}"%"
+        <if test="serial_name != null and '' != serial_name">
+            and serial_name like "%"#{serial_name}"%"
+        </if>
+        <if test="realTime_sta != null and '' != realTime_sta">
+            and allocate_date  &gt; #{realTime_sta}
+        </if>
+
+           <if test="realTime_end != null and '' != realTime_end">
+            and allocate_date &lt;  #{realTime_end}
         </if>
     </select>
 

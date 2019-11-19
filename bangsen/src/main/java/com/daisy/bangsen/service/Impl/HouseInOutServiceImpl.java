@@ -1,5 +1,6 @@
 package com.daisy.bangsen.service.Impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -92,9 +93,22 @@ public class HouseInOutServiceImpl implements HouseInOutService {
             HashMap paraMap = new HashMap<>();
             Page pageBean;
 
-            if (jsondata.containsKey("name") && StringUtils.isNotBlank(jsondata.getStr("name"))) {
-                paraMap.put("name", jsondata.get("name"));
+            if (jsondata.containsKey("receiptNumber") && StringUtils.isNotBlank(jsondata.getStr("receiptNumber"))) {
+                paraMap.put("receiptNumber", jsondata.get("receiptNumber"));
             }
+
+            if (jsondata.containsKey("inOutName") && StringUtils.isNotBlank(jsondata.getStr("inOutName"))) {
+                paraMap.put("inOutName", jsondata.get("inOutName"));
+            }
+
+            if (jsondata.containsKey("inOutType") && StringUtils.isNotBlank(jsondata.getStr("inOutType"))) {
+                paraMap.put("inOutType", jsondata.get("inOutType"));
+            }
+
+            if (jsondata.containsKey("warehouseName") && StringUtils.isNotBlank(jsondata.getStr("warehouseName"))) {
+                paraMap.put("warehouseName", jsondata.get("warehouseName"));
+            }
+
 
             JSONObject reall = new JSONObject();
             if (StringUtils.isBlank(jsondata.get("currentpage").toString()) && StringUtils.isBlank(jsondata.get("pagesize").toString())) {
@@ -105,8 +119,13 @@ public class HouseInOutServiceImpl implements HouseInOutService {
             paraMap.put("page", pageBean);
             List re = houseInOutDao.selectByParam(paraMap);
             int allsize = houseInOutDao.selectCount(null);
+
+            JSONArray ja=JSONUtil.parseArray(re);
+            for (int i =0;i<ja.size();i++){
+                ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+            }
             reall.put("total", allsize);
-            reall.put("list", re);
+            reall.put("list", ja);
             if (re != null && re.size() >= 0) {
                 respBean.setData(reall);
                 respBean.setStatus(200);
