@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.CsaleDao;
 import com.daisy.bangsen.entity.bussiness.Csale;
 import com.daisy.bangsen.service.CsaleService;
+import com.daisy.bangsen.util.NetImgUtil;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class CsaleServiceImpl implements CsaleService {
         RespBean respBean = new RespBean();
         try {
             Csale csale = JSONUtil.toBean(postData, Csale.class);
+            csale.setReceiptNumber(NetImgUtil.getTimeFlag());
+            csale.setSalesStatus("0");
             int re = csaleDao.insert(csale);
             if (re > 0) {
                 respBean.setStatus(200);
@@ -124,6 +127,7 @@ public class CsaleServiceImpl implements CsaleService {
             JSONArray ja=JSONUtil.parseArray(re);
             for (int i=0;i<ja.size();i++){
                 ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+                ja.getJSONObject(i).put("id",ja.getJSONObject(i).getStr("id"));
             }
             reall.put("total", allsize);
             reall.put("list", ja);

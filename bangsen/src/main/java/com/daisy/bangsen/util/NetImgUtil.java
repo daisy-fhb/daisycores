@@ -1,5 +1,7 @@
 package com.daisy.bangsen.util;
 
+import cn.hutool.core.date.DateUtil;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -45,5 +47,9 @@ public class NetImgUtil {
         inStream.close();
         //把outStream里的数据写入内存
         return outStream.toByteArray();
+    }
+    public static String getTimeFlag(){
+        String now= DateUtil.now().replaceAll(":","").replaceAll("-","").replaceAll(" ","").trim();
+        return now;
     }
 }

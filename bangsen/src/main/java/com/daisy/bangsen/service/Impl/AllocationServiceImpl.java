@@ -116,6 +116,7 @@ public class AllocationServiceImpl implements AllocationService {
             JSONArray ja=JSONUtil.parseArray(re);
             for (int i =0;i<ja.size();i++){
                 ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+                ja.getJSONObject(i).put("id",ja.getJSONObject(i).getStr("id"));
             }
             reall.put("total", allsize);
             reall.put("list", ja);

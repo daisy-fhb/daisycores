@@ -24,7 +24,7 @@ public class Indent {
     BigDecimal unitPrice; //单价
     BigDecimal price; //价格
     BigDecimal taxRate; //税率
-    int paymentStatus;//付款状态
+    String paymentStatus;//付款状态
     int purchaseStatus;//采购状态
     String purchaseRequestDate;//申请采购日期
     String departmentNumber; //部门编号

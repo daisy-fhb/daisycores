@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.HouseInOutDao;
 import com.daisy.bangsen.entity.bussiness.HouseInOut;
 import com.daisy.bangsen.service.HouseInOutService;
+import com.daisy.bangsen.util.NetImgUtil;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class HouseInOutServiceImpl implements HouseInOutService {
         RespBean respBean = new RespBean();
         try {
             HouseInOut houseInOut = JSONUtil.toBean(postData, HouseInOut.class);
+            houseInOut.setReceiptNumber(NetImgUtil.getTimeFlag());
+            houseInOut.setInOutType("0");
             int re = houseInOutDao.insert(houseInOut);
             if (re > 0) {
                 respBean.setStatus(200);
@@ -123,6 +126,7 @@ public class HouseInOutServiceImpl implements HouseInOutService {
             JSONArray ja=JSONUtil.parseArray(re);
             for (int i =0;i<ja.size();i++){
                 ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+                ja.getJSONObject(i).put("id",ja.getJSONObject(i).getStr("id"));
             }
             reall.put("total", allsize);
             reall.put("list", ja);

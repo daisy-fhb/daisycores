@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.SupplierPriceDao;
 import com.daisy.bangsen.entity.bussiness.SupplierPrice;
 import com.daisy.bangsen.service.SupplierPriceService;
+import com.daisy.bangsen.util.NetImgUtil;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class SupplierPriceServiceImpl implements SupplierPriceService {
         RespBean respBean = new RespBean();
         try {
             SupplierPrice supplierPrice = JSONUtil.toBean(postData, SupplierPrice.class);
+            supplierPrice.setReceiptNumber(NetImgUtil.getTimeFlag());
             int re = supplierPriceDao.insert(supplierPrice);
             if (re > 0) {
                 respBean.setStatus(200);
@@ -113,6 +115,7 @@ public class SupplierPriceServiceImpl implements SupplierPriceService {
             JSONArray ja=JSONUtil.parseArray(re);
             for(int i=0;i<ja.size();i++){
                 ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
+                ja.getJSONObject(i).put("id",ja.getJSONObject(i).getStr("id"));
             }
 
             reall.put("total", allsize);
