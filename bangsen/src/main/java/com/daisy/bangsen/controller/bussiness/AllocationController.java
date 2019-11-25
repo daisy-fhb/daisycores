@@ -29,6 +29,11 @@ public class AllocationController {
         return allocationService.update(jsondata);
     }
 
+    @RequestMapping(value = "/querywaredata" , method = RequestMethod.GET)
+    public RespBean querywaredata(){
+        return allocationService.querywaredata();
+    }
+
     @RequestMapping(value = "/query" , method = RequestMethod.GET)
     public RespBean query(String allocateDate,  String currentpage, String pagesize,  String serialName){
         RespBean re;

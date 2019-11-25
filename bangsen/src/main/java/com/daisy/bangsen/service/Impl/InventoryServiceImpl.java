@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.InventoryDao;
 import com.daisy.bangsen.entity.bussiness.Inventory;
 import com.daisy.bangsen.service.InventoryService;
+import com.daisy.bangsen.util.NetImgUtil;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class InventoryServiceImpl implements InventoryService {
         RespBean respBean = new RespBean();
         try {
             Inventory inventory = JSONUtil.toBean(postData, Inventory.class);
+            inventory.setReceiptNumber(NetImgUtil.getTimeFlag());
+            inventory.setSerialNumber(NetImgUtil.getTimeFlag());
             int re = inventoryDao.insert(inventory);
             if (re > 0) {
                 respBean.setStatus(200);

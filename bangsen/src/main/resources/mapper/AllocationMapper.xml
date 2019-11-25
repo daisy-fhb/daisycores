@@ -16,7 +16,11 @@
 
            <if test="realTime_end != null and '' != realTime_end">
             and allocate_date &lt;  #{realTime_end}
-        </if>
+          </if>
+    </select>
+
+    <select id="querywaredata" resultType="java.lang.String">
+        SELECT DISTINCT(warehouse_name) from t_inventory
     </select>
 
 </mapper>

@@ -5,7 +5,9 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.AllocationDao;
+import com.daisy.bangsen.dao.InventoryDao;
 import com.daisy.bangsen.entity.bussiness.Allocation;
+import com.daisy.bangsen.entity.bussiness.Inventory;
 import com.daisy.bangsen.service.AllocationService;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -22,6 +26,8 @@ public class AllocationServiceImpl implements AllocationService {
 
     @Autowired
     AllocationDao allocationDao;
+    @Autowired
+    InventoryDao inventoryDao;
 
     @Override
     public RespBean save(String postData) {
@@ -117,6 +123,7 @@ public class AllocationServiceImpl implements AllocationService {
             for (int i =0;i<ja.size();i++){
                 ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
                 ja.getJSONObject(i).put("id",ja.getJSONObject(i).getStr("id"));
+                ja.getJSONObject(i).put("allocateDate",ja.getJSONObject(i).getStr("allocateDate").split(" ")[0]);
             }
             reall.put("total", allsize);
             reall.put("list", ja);
@@ -133,6 +140,29 @@ public class AllocationServiceImpl implements AllocationService {
             respBean.setStatus(2000);
             respBean.setMsg("查询失败，" + e.getMessage());
         }
+        return respBean;
+    }
+
+    @Override
+    public RespBean querywaredata() {
+        List<String> warehouses=allocationDao.querywaredata();
+        List<Map<String, Object>> res=new ArrayList<>();
+        for (String warehouse_name:warehouses){
+            HashMap param=new HashMap();
+            param.put("warehouse_name",warehouse_name);
+            List<Inventory> allocations= inventoryDao.selectByParam(param);
+            JSONArray incentory=JSONUtil.parseArray(allocations);
+            for (int i=0;i<incentory.size();i++){
+                incentory.getJSONObject(i).put("id",    incentory.getJSONObject(i).getStr("id"));
+            }
+            Map<String, Object> re=new HashMap<>();
+            re.put("name",warehouse_name);
+            re.put("list",incentory);
+            res.add(re);
+        }
+       RespBean respBean=new RespBean();
+        respBean.setData(res);
+        respBean.setStatus(200);
         return respBean;
     }
 }

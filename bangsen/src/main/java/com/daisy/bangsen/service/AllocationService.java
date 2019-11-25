@@ -11,4 +11,6 @@ public interface AllocationService {
     RespBean update(String postData);
 
     RespBean query(String postData);
+
+    RespBean querywaredata();
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daisy.bangsen.dao.SimpleProduceDao;
 import com.daisy.bangsen.entity.producement.SimpleProduce;
 import com.daisy.bangsen.service.SimpleProduceService;
+import com.daisy.bangsen.util.NetImgUtil;
 import com.daisy.bangsen.util.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class SimpleProduceServiceImpl implements SimpleProduceService {
         RespBean respBean = new RespBean();
         try {
             SimpleProduce simpleProduce = JSONUtil.toBean(postData, SimpleProduce.class);
+            simpleProduce.setReceiptNumber(NetImgUtil.getTimeFlag());
+            simpleProduce.setProductionStatus(0);
             int re = simpleProduceDao.insert(simpleProduce);
             if (re > 0) {
                 respBean.setStatus(200);
@@ -116,6 +119,7 @@ public class SimpleProduceServiceImpl implements SimpleProduceService {
             for (int i =0;i<ja.size();i++){
                 ja.getJSONObject(i).put("key",ja.getJSONObject(i).getStr("id"));
                 ja.getJSONObject(i).put("id",ja.getJSONObject(i).getStr("id"));
+                ja.getJSONObject(i).put("productionCompletion",ja.getJSONObject(i).getInt("productionCompletion"));
             }
             reall.put("total", allsize);
             reall.put("list", ja);
