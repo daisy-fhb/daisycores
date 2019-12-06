@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
             Map<String,Integer> email_sys=redisTemplate.opsForHash().entries("emailcode");
             if (email_sys.containsKey(email) && email_sys.get(email).toString().equals(verificationCode)){
                 User user =new User();
-                user.setId(snowflake.nextIdStr());
+                user.setId(snowflake.nextId());
                 user.setName((postdata.getStr("uName")));
                 user.setAccount((postdata.getStr("uName")));
                 user.setEmail(email);
@@ -291,7 +291,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userDao.selectByMap(paraMap);
         if (users != null && !users.isEmpty()) {
             Map<String, String> CurrentUserMap = redisTemplate.opsForHash().entries("CurrentUserMap");
-            CurrentUserMap.put(users.get(0).getId(), JSONUtil.toJsonStr(users.get(0)));
+            CurrentUserMap.put(String.valueOf(users.get(0).getId()), JSONUtil.toJsonStr(users.get(0)));
             redisTemplate.opsForHash().putAll("CurrentUserMap", CurrentUserMap);
 
             Role role = new Role();
@@ -304,7 +304,7 @@ public class UserServiceImpl implements UserService {
             if (TokenUserMap==null){
                 TokenUserMap=new HashMap<>();
             }
-            TokenUserMap.put(users.get(0).getId(), token);
+            TokenUserMap.put(String.valueOf(users.get(0).getId()), token);
             redisTemplate.opsForHash().put("TokenUserMap", "data",TokenUserMap);
 
             respBean.setMsg("登录成功");

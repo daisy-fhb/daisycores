@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 
@@ -24,7 +21,7 @@ import java.sql.Timestamp;
 public class User {
     @TableId("id")
     @Id
-    String id;
+    long id;
     @Column(length = 20)
     String name;   //姓名
     String account;   //姓名

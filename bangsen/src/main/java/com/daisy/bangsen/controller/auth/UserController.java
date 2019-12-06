@@ -129,14 +129,11 @@ public class UserController {
 
     @RequestMapping(value = "/vertifypic" , method = RequestMethod.GET)
      public boolean vertifypic(HttpServletResponse response) {
-         try {
-             String url = "https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture";
-             NetImgUtil.ImageRequest(url, response);
-         }catch (Exception e){
-             e.printStackTrace();
-         }
-            return true;
-        }
+//        String url = "https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture";
+//        NetImgUtil.ImageRequestAndScale(url,response);
+        NetImgUtil.ImageLocalAndScale(response);
+        return true;
+    }
 
 
 

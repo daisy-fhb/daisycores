@@ -28,5 +28,6 @@ public class Asset {
     String department; //所属部门
     long count; //数量
     String type; //类别
+    String nature; // 资产性质 ：工治具/正常资产
     int status; //状态
 }

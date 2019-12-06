@@ -9,6 +9,8 @@ import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.system.SystemUtil;
 import com.daisy.bangsen.dao.RespectPlanDao;
+import com.daisy.bangsen.dao.UserDao;
+import com.daisy.bangsen.entity.auth.User;
 import com.daisy.bangsen.entity.producement.RespectPlan;
 import com.daisy.bangsen.service.IndexService;
 import com.daisy.bangsen.util.DownLoadUtil;
@@ -37,6 +39,8 @@ public class IndexController {
     IndexService indexService;
     @Autowired
     RespectPlanDao respectPlanDao;
+    @Autowired
+    UserDao userDao;
 
 
     @RequestMapping("top")
@@ -100,18 +104,28 @@ public class IndexController {
         RespBean respBean=new RespBean();
         try {
             String web_root;// 绝对路径
-            if (SystemUtil.getOsInfo().isLinux()) {
+            if (SystemUtil.getOsInfo().isLinux()){
                 web_root = "/home/bangsen/import/";
-            } else {
-                web_root = "D:\\迅雷下载\\" + "bangsen/import/";
+            }else{
+                web_root = "D:\\home\\bangsen\\import\\";
             }
+
             File exisfolder = new File(web_root);//检查文件夹是否存在 ，不存在则新建
             if (!exisfolder.exists() || !exisfolder.isDirectory()) {
+                exisfolder.mkdirs();
+            }else{
+                //检查上传文件是否存在，若存在则覆盖，不存在则新增
+                FileUtil.del(web_root);
                 exisfolder.mkdirs();
             }
             MultipartHttpServletRequest multipartRequest =
                     WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class);
-            MultipartFile file = multipartRequest.getFile("excel");
+            MultipartFile file = multipartRequest.getFile("file");
+            if (file==null){
+                respBean.setStatus(201);
+                respBean.setMsg("附件为空!");
+                return respBean;
+            }
             String originalFilename = file.getOriginalFilename();
             String fileName = RandomUtil.randomString(10) + "_" + originalFilename;//获取文件名
             if (!FileUtil.extName(fileName).equals("xls") &&
@@ -122,19 +136,43 @@ public class IndexController {
                 return respBean;
             }
             String filePath = web_root + File.separatorChar + fileName;//拼装文件存储路径
-            //检查上传文件是否存在，若存在则覆盖，不存在则新增
-            File existcheck = new File(web_root + File.separatorChar + fileName);
-            if (existcheck.exists() && existcheck.isFile()) {
-                existcheck.delete();
-            }
-
             File src_imgFile = new File(filePath);
             //存入磁盘
             file.transferTo(src_imgFile);
             //存数据库
-            if (FileUtil.exist(src_imgFile)){
-                ExcelReader reader = ExcelUtil.getReader(src_imgFile);
-                List<Map<String,Object>> readAll = reader.readAll();
+            if (FileUtil.exist(src_imgFile)) {
+                ExcelReader reader ;
+                if ("attendance".equals(type)){
+                    //读取考勤信息
+                    reader  = ExcelUtil.getReader(src_imgFile,2);
+                    List<List<Object>> readAll = reader.read();
+                    System.out.println();
+                }else{
+                    reader  = ExcelUtil.getReader(src_imgFile);
+                }
+                List<Map<String, Object>> readAll = reader.readAll();
+                for (Map<String, Object> map : readAll) {
+                    if ("userinfo".equals(type)) {
+                        User user = new User();
+                        if (map.get("性别").toString().equals("男")) {
+                            user.setSex(1);
+                        } else {
+                            user.setSex(0);
+                        }
+                        user.setName(map.get("姓名").toString());
+                        user.setEducation(map.get("学历").toString());
+                        user.setMajor(map.get("专业").toString());
+                        user.setPhone(map.get("电话").toString());
+                        user.setEmail(map.get("邮箱").toString());
+                        user.setInterviewtime(map.get("入职时间").toString());
+                        user.setIshire(map.get("是否聘用").toString());
+                        user.setRoleid("1");
+                        user.setId(System.currentTimeMillis());
+                        userDao.insert(user);
+                    }else if("caigou".equals(type)){
+
+                    }
+                }
             }
             respBean.setStatus(200);
             respBean.setMsg("导入成功！");
